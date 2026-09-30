@@ -1,5 +1,11 @@
 # ⚡ WeatherSphere AI - Intelligent Weather & Climate Forecasting Platform
 
+[![Live App](https://img.shields.io/badge/Live_App-Open_WeatherSphere_AI-00f2fe?style=for-the-badge&logo=render)](https://weathersphere-ai.onrender.com)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/PrachiPandya26/WeatherSphere-AI)
+
+🚀 **Live Deployment URL**: **[https://weathersphere-ai.onrender.com](https://weathersphere-ai.onrender.com)**  
+*(Alternative Vercel URL: [https://weathersphere-ai.vercel.app](https://weathersphere-ai.vercel.app))*
+
 A fullstack Python & FastAPI weather web application built with a modern Glassmorphism dark UI, live dynamic atmospheric canvas background animations, interactive Chart.js trend graphs, Leaflet geographic maps, and a smart AI Weather Advisor engine.
 
 Repository: **[https://github.com/PrachiPandya26/WeatherSphere-AI](https://github.com/PrachiPandya26/WeatherSphere-AI)**
@@ -37,14 +43,11 @@ Repository: **[https://github.com/PrachiPandya26/WeatherSphere-AI](https://githu
 1. Sign up/Log in to **[Render.com](https://render.com)**.
 2. Click **New +** -> **Web Service**.
 3. Connect your GitHub repository: `PrachiPandya26/WeatherSphere-AI`.
-4. Select **Python** runtime:
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. Click **Create Web Service** — Render will build and host your app live with a free `https://weathersphere-ai.onrender.com` URL!
+4. Render automatically detects `render.yaml` and deploys your live app at `https://weathersphere-ai.onrender.com`!
 
 ### Option B: Deploy on Vercel
 1. Go to **[Vercel.com](https://vercel.com)** and import `PrachiPandya26/WeatherSphere-AI`.
-2. Vercel automatically detects `vercel.json` and deploys your FastAPI web app in seconds.
+2. Vercel automatically detects `vercel.json` and deploys your FastAPI web app in seconds at `https://weathersphere-ai.vercel.app`.
 
 ---
 
