@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeatherSphere AI - Intelligent Climate & Weather Platform</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Leaflet Maps CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Animated Weather Canvas Background -->
+  <canvas id="weather-canvas"></canvas>
+
+  <!-- Loader Overlay -->
+  <div id="loader-overlay" class="loader-overlay hidden">
+    <div class="spinner"></div>
+    <p style="margin-top: 16px; color: var(--primary-accent); font-weight: 600;">Fetching Real-Time Atmosphere Data...</p>
+  </div>
+
+  <!-- Main App Container -->
+  <div class="app-container">
+
+    <!-- Header Navigation -->
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-bolt-lightning"></i>
+        </div>
+        <div class="logo-text">
+          <h1>WeatherSphere AI</h1>
+          <span>Climate Intelligence</span>
+        </div>
+      </div>
+
+      <!-- Search Box with Autocomplete -->
+      <div class="search-box-container">
+        <div class="search-input-wrapper">
+          <i class="fas fa-magnifying-glass"></i>
+          <input type="text" id="search-input" class="search-input" placeholder="Search city worldwide..." autocomplete="off">
+          <button id="location-btn" class="location-btn" title="Use My Current Location">
+            <i class="fas fa-location-crosshairs"></i>
+          </button>
+        </div>
+        <div id="search-suggestions" class="search-suggestions"></div>
+      </div>
+
+      <!-- Header Controls -->
+      <div class="header-controls">
+        <button id="unit-toggle-btn" class="unit-toggle-btn">°C</button>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Grid -->
+    <main class="dashboard-grid">
+      
+      <!-- Left Main Column (Hero, AI Insights, Hourly Trends) -->
+      <div class="main-column" style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- Hero Weather Card -->
+        <div class="glass-card hero-card">
+          <div class="location-meta">
+            <div>
+              <h2 id="city-name" class="city-name">London</h2>
+              <div id="current-date" class="date-text">Wednesday, Oct 1</div>
+            </div>
+            <div id="weather-badge" class="weather-badge">
+              <i class="fas fa-sparkles"></i>
+              <span id="weather-desc">Partly Cloudy</span>
+            </div>
+          </div>
+
+          <div class="hero-main">
+            <div>
+              <div id="main-temp" class="temp-large">22°</div>
+              <div class="feels-like">Feels like <span id="feels-like-temp">24°C</span></div>
+            </div>
+            <i id="hero-weather-icon" class="fas fa-sun weather-icon-giant"></i>
+          </div>
+
+          <!-- Quick Weather Parameters -->
+          <div class="quick-stats-grid">
+            <div class="stat-item">
+              <div class="stat-icon"><i class="fas fa-wind"></i></div>
+              <div class="stat-info">
+                <span>Wind Speed</span>
+                <strong id="stat-wind">14 km/h</strong>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon"><i class="fas fa-droplet"></i></div>
+              <div class="stat-info">
+                <span>Humidity</span>
+                <strong id="stat-humidity">62%</strong>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon"><i class="fas fa-gauge"></i></div>
+              <div class="stat-info">
+                <span>Pressure</span>
+                <strong id="stat-pressure">1014 hPa</strong>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon"><i class="fas fa-cloud-rain"></i></div>
+              <div class="stat-info">
+                <span>Precipitation</span>
+                <strong id="stat-precip">0 mm</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Weather Advisor Card -->
+        <div class="glass-card ai-advisor-card">
+          <div class="ai-header">
+            <div class="section-title" style="margin-bottom:0;">
+              <i class="fas fa-brain-circuit"></i>
+              AI Weather Advisor
+            </div>
+            <span class="ai-badge">Smart Insight</span>
+          </div>
+
+          <p id="ai-summary-text" class="ai-summary">
+            Generating intelligent weather recommendations...
+          </p>
+
+          <div class="ai-grid">
+            <div class="ai-box">
+              <div class="ai-box-title">
+                <i class="fas fa-shirt"></i> Outfit & Dressing Advice
+              </div>
+              <p id="ai-clothing-text">Recommended clothing will appear here.</p>
+            </div>
+
+            <div class="ai-box">
+              <div class="ai-box-title">
+                <i class="fas fa-person-running"></i> Outdoor Activity Score
+              </div>
+              <div class="activity-score-circle">
+                <div id="activity-score-num" class="score-num">85/100</div>
+              </div>
+              <ul id="ai-activities-list" style="margin-top: 8px; font-size: 12px; color: var(--text-secondary); padding-left: 18px;"></ul>
+            </div>
+          </div>
+
+          <div id="ai-health-list" style="margin-top: 14px; font-size: 13px; color: #cbd5e1;"></div>
+        </div>
+
+        <!-- Hourly Forecast & Interactive Chart -->
+        <div class="glass-card">
+          <div class="section-title">
+            <i class="fas fa-chart-line"></i>
+            24-Hour Temperature & Rain Trend
+          </div>
+          
+          <!-- Hourly Horizontal Scroll Badges -->
+          <div id="hourly-scroll-container" class="hourly-scroll"></div>
+
+          <!-- Chart.js Canvas -->
+          <div style="height: 220px; position: relative; margin-top: 18px;">
+            <canvas id="hourly-chart-canvas"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column (7-Day Daily Forecast, Air Quality, Map) -->
+      <div class="side-column" style="display: flex; flex-direction: column; gap: 24px;">
+
+        <!-- 7-Day Forecast Card -->
+        <div class="glass-card">
+          <div class="section-title">
+            <i class="fas fa-calendar-week"></i>
+            7-Day Forecast
+          </div>
+          <div id="daily-forecast-container" class="daily-forecast-list"></div>
+        </div>
+
+        <!-- Air Quality Card -->
+        <div class="glass-card">
+          <div class="section-title">
+            <i class="fas fa-wind-dust"></i>
+            Air Quality Index (AQI)
+          </div>
+          
+          <div class="aqi-container">
+            <div>
+              <div style="font-size: 12px; color: var(--text-secondary);">US AQI Standard</div>
+              <div id="aqi-val" class="aqi-val">34</div>
+            </div>
+            <div id="aqi-status" class="aqi-status">Good</div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); padding: 0 8px;">
+            <span>PM2.5: <strong id="aqi-pm25" style="color:#fff;">8.2 µg/m³</strong></span>
+            <span>PM10: <strong id="aqi-pm10" style="color:#fff;">15.4 µg/m³</strong></span>
+          </div>
+        </div>
+
+        <!-- Interactive Map Card -->
+        <div class="glass-card">
+          <div class="section-title">
+            <i class="fas fa-map-location-dot"></i>
+            Geographic Location
+          </div>
+          <div id="weather-map"></div>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- Application JS Scripts -->
+  <script src="/static/js/canvas_weather.js"></script>
+  <script src="/static/js/charts.js"></script>
+  <script src="/static/js/app.js"></script>
+
+</body>
+</html>
